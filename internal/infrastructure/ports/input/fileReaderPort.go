@@ -9,9 +9,9 @@ import (
 )
 
 type Transaction struct {
-	id          int
-	date        string
-	transaction string
+	Id          int
+	Date        string
+	Transaction string
 }
 
 func ReadFile(route string) []Transaction {
@@ -44,8 +44,8 @@ func ReadFile(route string) []Transaction {
 			break
 		}
 		transaction := Transaction{
-			date:        read[1],
-			transaction: read[2],
+			Date:        read[1],
+			Transaction: read[2],
 		}
 		if read[0] != "" {
 			id, err := strconv.Atoi(read[0])
@@ -53,7 +53,7 @@ func ReadFile(route string) []Transaction {
 				log.Printf("Error converting id to int line %d: %v", lineNumber, err)
 				break
 			}
-			transaction.id = id
+			transaction.Id = id
 		}
 
 		transactions = append(transactions, transaction)

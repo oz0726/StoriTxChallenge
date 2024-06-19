@@ -9,12 +9,19 @@ import (
 	"os"
 )
 
-type BodyContent struct {
-	Body string
+type Balance struct {
+	AverageDebit   string
+	AverageCredit  string
+	BalanceValue   string
+	MonthlyBalance []MonthlyBalance
 }
 
-func SendMail(body string) {
-	bodyContent := BodyContent{body}
+type MonthlyBalance struct {
+	Month    string
+	Quantity int
+}
+
+func SendMail(balance Balance) {
 	t, err := template.ParseFiles("./resources/mail_template.html")
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
@@ -28,7 +35,7 @@ func SendMail(body string) {
 	smtpPassword := os.Getenv("SMTP_PASSWORD")
 
 	buffer := new(bytes.Buffer)
-	err = t.Execute(buffer, bodyContent)
+	err = t.Execute(buffer, balance)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}

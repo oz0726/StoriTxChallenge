@@ -1,12 +1,9 @@
 package main
 
 import (
-	smtpSender "StoriTxChallenge/internal/infrastructure/adapters/smtp"
-	fileReader "StoriTxChallenge/internal/infrastructure/ports/input"
-	"fmt"
+	"StoriTxChallenge/internal/application/service"
 )
 
 func main() {
-	fmt.Println(fileReader.ReadFile("./resources/txns.csv"))
-	smtpSender.SendMail("hello world")
+	service.BalanceGenerator("./resources/txns.csv")
 }

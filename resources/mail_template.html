@@ -252,10 +252,20 @@
                             <tr>
                                 <td align="left" style="font-size:0px;padding:15px 15px 15px 15px;word-break:break-word;">
 
-                                    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1.5;text-align:left;color:#000000;"><p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
-                                        {{.Body}}
-                                    </p></div>
-
+                                    <div style="font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:13px;line-height:1.5;text-align:left;color:#000000;">
+                                        <p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
+                                        Below we share the balance of your account and the latest recorded transactions.</p>
+                                        <p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
+                                            Total balance is: {{.BalanceValue}}</p>
+                                        <p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
+                                            Average debit amount: {{.AverageDebit}}</p>
+                                        <p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
+                                            Average credit amount: {{.AverageCredit}}</p>
+                                        {{range .MonthlyBalance}}
+                                        <p style="font-family: Ubuntu, sans-serif; font-size: 11px;">
+                                            Number of transactions in {{.Month}} : {{.Quantity}}</p>
+                                        {{end}}
+                                    </div>
                                 </td>
                             </tr>
 
