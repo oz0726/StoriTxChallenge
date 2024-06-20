@@ -1,4 +1,4 @@
-package input
+package filesystem
 
 import (
 	"encoding/csv"
@@ -8,17 +8,14 @@ import (
 	"strconv"
 )
 
-type Transaction struct {
-	Id          int
-	Date        string
-	Transaction string
-}
+import "StoriTxChallenge/internal/application/domain"
 
-func ReadFile(route string) []Transaction {
-	var transactions []Transaction
+type FileReaderAdapter struct{}
+
+func (a FileReaderAdapter) ReadFile(route string) []domain.Transaction {
 	file, err := os.Open(route)
 	if err != nil {
-		log.Printf("Error opening file: %v", err)
+		log.Fatalf("Error opening file: %v", err)
 		return nil
 	}
 	defer file.Close()
@@ -28,10 +25,11 @@ func ReadFile(route string) []Transaction {
 
 	_, err = r.Read()
 	if err != nil {
-		log.Printf("Error reading heading: %v", err)
+		log.Fatalf("Error reading heading: %v", err)
 		return nil
 	}
 
+	var transactions []domain.Transaction
 	lineNumber := 1
 
 	for {
@@ -40,18 +38,20 @@ func ReadFile(route string) []Transaction {
 			log.Println("End of file")
 			break
 		} else if err != nil {
-			log.Printf("Error reading line %d: %v", lineNumber, err)
-			break
+			log.Fatalf("Error reading line %d: %v", lineNumber, err)
+			return nil
 		}
-		transaction := Transaction{
+
+		transaction := domain.Transaction{
 			Date:        read[1],
 			Transaction: read[2],
 		}
+
 		if read[0] != "" {
 			id, err := strconv.Atoi(read[0])
 			if err != nil {
-				log.Printf("Error converting id to int line %d: %v", lineNumber, err)
-				break
+				log.Fatalf("Error converting id to int line %d: %v", lineNumber, err)
+				return nil
 			}
 			transaction.Id = id
 		}
@@ -59,5 +59,6 @@ func ReadFile(route string) []Transaction {
 		transactions = append(transactions, transaction)
 		lineNumber++
 	}
+
 	return transactions
 }
