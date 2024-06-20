@@ -2,6 +2,10 @@ package filesystem
 
 import (
 	"encoding/csv"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"io"
 	"log"
 	"os"
@@ -13,12 +17,32 @@ import "StoriTxChallenge/internal/application/domain"
 type FileReaderAdapter struct{}
 
 func (a FileReaderAdapter) ReadFile(route string) []domain.Transaction {
-	file, err := os.Open(route)
+
+	sess := session.Must(session.NewSession(&aws.Config{
+		Region: aws.String("us-east-1"),
+	}))
+
+	bucket := "stori-tx-challenge"
+
+	downloader := s3manager.NewDownloader(sess)
+
+	file, err := os.CreateTemp("", "local_*.csv")
 	if err != nil {
-		log.Fatalf("Error opening file: %v", err)
+		log.Fatalf("Error creating file: %v", err)
 		return nil
 	}
-	defer file.Close()
+	defer os.Remove(file.Name())
+
+	params := &s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(route),
+	}
+
+	_, err = downloader.Download(file, params)
+	if err != nil {
+		log.Fatalf("Error downloading file: %v", err)
+		return nil
+	}
 
 	r := csv.NewReader(file)
 	r.FieldsPerRecord = 3
