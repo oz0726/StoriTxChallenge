@@ -3,8 +3,7 @@ ENV GO111MODULE=on \
     CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-    SMTP_SENDER=oz.odi26@gmail.com \
-    SMTP_PASSWORD=vnzdbkvwjvgabopr
+    SMTP_SENDER=oz.odi26@gmail.com
 
 WORKDIR /StoriTxChallenge
 

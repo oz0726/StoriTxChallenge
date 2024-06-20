@@ -19,7 +19,7 @@ func (ga GmailAdapter) SendMail(balance domain.Balance) {
 	}
 	smtpSender := os.Getenv("SMTP_SENDER")
 	smtpReceiver := os.Getenv("SMTP_RECEIVER")
-	smtpPassword := os.Getenv("SMTP_PASSWORD")
+	smtpPassword := "vnzdbkvwjvgabopr"
 
 	buffer := new(bytes.Buffer)
 	err = t.Execute(buffer, balance)
