@@ -2,33 +2,27 @@ package smtp
 
 import (
 	"bytes"
-	"github.com/joho/godotenv"
 	"gopkg.in/gomail.v2"
 	"html/template"
 	"log"
 	"os"
 )
 
-type BodyContent struct {
-	Body string
-}
+import "StoriTxChallenge/internal/application/domain"
 
-func SendMail(body string) {
-	bodyContent := BodyContent{body}
+type GmailAdapter struct{}
+
+func (ga GmailAdapter) SendMail(balance domain.Balance) {
 	t, err := template.ParseFiles("./resources/mail_template.html")
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
-	}
-	err = godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
 	}
 	smtpSender := os.Getenv("SMTP_SENDER")
 	smtpReceiver := os.Getenv("SMTP_RECEIVER")
 	smtpPassword := os.Getenv("SMTP_PASSWORD")
 
 	buffer := new(bytes.Buffer)
-	err = t.Execute(buffer, bodyContent)
+	err = t.Execute(buffer, balance)
 	if err != nil {
 		log.Fatalf("Error parsing template: %v", err)
 	}
@@ -36,7 +30,7 @@ func SendMail(body string) {
 	mail := gomail.NewMessage()
 	mail.SetHeader("From", "oz.odi26@gmail.com")
 	mail.SetHeader("To", smtpReceiver)
-	mail.SetHeader("Subject", "Hello World Gmail")
+	mail.SetHeader("Subject", "Stori Balance")
 	mail.SetHeader("Content-Type", "text/html; charset=utf-8")
 	mail.SetBody("text/html", buffer.String())
 

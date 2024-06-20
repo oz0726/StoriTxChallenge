@@ -1,12 +1,15 @@
 package main
 
 import (
-	smtpSender "StoriTxChallenge/internal/infrastructure/adapters/smtp"
-	fileReader "StoriTxChallenge/internal/infrastructure/ports/input"
-	"fmt"
+	"StoriTxChallenge/internal/application/service"
+	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
-	fmt.Println(fileReader.ReadFile("./resources/txns.csv"))
-	smtpSender.SendMail("hello world")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading receiver.env file: %v", err)
+	}
+	service.BalanceGenerator("./resources/txns.csv")
 }
