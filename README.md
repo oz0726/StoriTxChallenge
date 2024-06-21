@@ -100,3 +100,4 @@ Finally, the triggers must be configured to start the lambda, in the example I c
 
 9. If the configuration is correct, the triggers configured in the lambda should generate the balance by email
 
+Author: [Olman Ibañez](https://www.linkedin.com/in/olman-ibanez/)
