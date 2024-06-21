@@ -22,8 +22,7 @@ func (a FileReaderAdapter) ReadFile(route string) []domain.Transaction {
 		Region: aws.String("us-east-1"),
 	}))
 
-	bucket := "stori-tx-challenge"
-
+	bucket := os.Getenv("AWS_BUCKET")
 	downloader := s3manager.NewDownloader(sess)
 
 	file, err := os.CreateTemp("", "local_*.csv")

@@ -4,6 +4,7 @@ import (
 	"StoriTxChallenge/internal/application/service"
 	"github.com/joho/godotenv"
 	"log"
+	"os"
 )
 import (
 	"github.com/aws/aws-lambda-go/lambda"
@@ -18,5 +19,6 @@ func runLambda() {
 	if err != nil {
 		log.Fatalf("Error loading receiver.env file: %v", err)
 	}
-	service.BalanceGenerator("txns.csv")
+	route := os.Getenv("AWS_OBJECT")
+	service.BalanceGenerator(route)
 }
